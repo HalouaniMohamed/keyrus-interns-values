@@ -81,7 +81,7 @@ krakend:
                 exporters:
                     prometheus:
                         - name: "local_prometheus"
-                          port: 9101
+                          port: 9100
                           process_metrics: true
                           go_metrics: true
     imagePullSecrets: []
@@ -113,12 +113,12 @@ krakend:
         targetPort: 8080
         annotations:
             prometheus.io/scrape: "true"
-            prometheus.io/port: "9101"
+            prometheus.io/port: "9100"
             prometheus.io/path: "/metrics"
         metrics:
             enabled: true
-            port: 9101
-            targetPort: 9101
+            port: 9100
+            targetPort: 9100
     ingress:
         enabled: false
         className: ""
@@ -156,7 +156,7 @@ krakend:
         annotations: {}
         interval: 10s
         scrapeTimeout: 10s
-        targetPort: 9101
+        targetPort: 9100
         selectorLabels:
             app: "krakend"
     networkPolicies:
@@ -740,7 +740,7 @@ prometheus:
                         action: replace
                         target_label: node
     extraScrapeConfigs: |
-        - job_name: 'test'
+        - job_name: 'krakend'
           metrics_path: /metrics
           kubernetes_sd_configs:
             - role: endpoints
@@ -753,7 +753,7 @@ prometheus:
               regex: test
             - source_labels: [__meta_kubernetes_service_name]
               action: keep
-              regex: krakend
+              regex: krakend-stack
             - source_labels: [__meta_kubernetes_endpoint_port_name]
               action: keep
               regex: metrics  # Ensure this matches the port name defined in the service
@@ -1320,7 +1320,7 @@ grafana:
         appProtocol: ""
 
     serviceMonitor:
-        enabled: false
+        enabled: true
         path: /metrics
         labels: {}
         interval: 30s
