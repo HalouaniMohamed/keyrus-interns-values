@@ -96,7 +96,7 @@ krakend:
     deploymentAnnotations: {}
     podLabels: {}
     podSecurityContext: {}
-    securityContext:
+    securityContext: 
         allowPrivilegeEscalation: false
         runAsNonRoot: true
         runAsUser: 1000
